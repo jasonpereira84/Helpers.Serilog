@@ -19,6 +19,9 @@
     <Title>JasonPereira84's Serilog helpers library</Title>
     <PackageDescription>Serilog helper methods, properties, objects etc.</PackageDescription>
     <PackageTags>C#, Library, Utils, Helpers, Serilog</PackageTags>
+    <RepositoryUrl>https://github.com/jasonpereira84/Helpers.Serilog</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Authors>jasonpereira84@gmail.com</Authors>
     <Version>2.0.0</Version>
 
@@ -39,6 +42,13 @@
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Sinks.MySQL" Version="4.0.0" />
     <PackageReference Include="JasonPereira84.AppSettings" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
