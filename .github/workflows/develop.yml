@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout develop
+      uses: actions/checkout@v2
     
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
@@ -19,5 +20,14 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
       
-    - name: Build Solution
-      run: dotnet build --configuration Debug --no-restore --verbosity Normal
+    - name: Build solution
+      run: dotnet build --configuration Debug --no-restore --verbosity Normal --output BuildResults --disable-parallel
+
+    - name: Run tests
+      run: dotnet test --configuration Debug --no-restore --verbosity Normal
+
+    - name: Upload artifact 
+      uses: actions/upload-artifact@v2
+      with:
+        path: BuildResults
+        if-no-files-found: error
