@@ -16,13 +16,7 @@ namespace JasonPereira84.Helpers
             public sealed class Context : _Context<AppSettings.Database.MySql, MySqlConnection, MySqlCommand>
             {
                 public static Generator.ConnectionString<AppSettings.Database.MySql> DefaultConnectionStringGenerator
-                    => new Generator.ConnectionString<AppSettings.Database.MySql>((mySql)
-                            => new StringBuilder($"Database={mySql.Name};")
-                                .Append($"Server={mySql.Server.Endpoint.Host};Port={mySql.Server.Endpoint.Port};")
-                                .Append($"User Id={mySql.Server.Credentials.Id};Password={mySql.Server.Credentials.Secret};")
-                                .Append($"PersistSecurityInfo={mySql.PersistSecurityInfo};")
-                                .Append($"AllowUserVariables={mySql.AllowUserVariables};")
-                                .ToString());
+                    => AppSettings.Extensions.AsConnectionString;
 
                 public static Generator.CommandText DefaultCommandTextGenerator(String format, String table)
                     => new Generator.CommandText((timestamp, level, messageTemplate, exception, parameters)

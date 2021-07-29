@@ -28,7 +28,7 @@ namespace JasonPereira84.Helpers
 
             protected Dictionary<String, String> DefaultParameters { get; private set; }
 
-            public void AddDefaultParameters(params (String Name, String Value)[] parameters)
+            public _Context<TConnection, TCommand> AddDefaultParameters(params (String Name, String Value)[] parameters)
             {
                 foreach (var pair in (parameters ?? new (String Name, String Value)[0]))
                     if (!String.IsNullOrWhiteSpace(pair.Name))
@@ -37,6 +37,7 @@ namespace JasonPereira84.Helpers
                         if (!DefaultParameters.ContainsKey(key))
                             DefaultParameters.Add(key, pair.Value.Sanitize().EscapeSingleQuotes());
                     }
+                return this;
             }
 
             public TConnection CreateConnection()
@@ -46,15 +47,9 @@ namespace JasonPereira84.Helpers
                 return connection;
             }
 
-            public void WriteEvent(DateTimeOffset timestamp, LogEventLevel level, Exception exception, String messageTemplate, params (String Name, String Value)[] parameters)
+            public (String Name, String Value)[] WriteEvent(TConnection connection, DateTimeOffset timestamp, LogEventLevel level, Exception exception, String messageTemplate, params (String Name, String Value)[] parameters)
             {
-                using (var connection = CreateConnection())
-                    WriteEvent(connection, timestamp, level, exception, messageTemplate, parameters);
-            }
-
-            public void WriteEvent(TConnection connection, DateTimeOffset timestamp, LogEventLevel level, Exception exception, String messageTemplate, params (String Name, String Value)[] parameters)
-            {
-                (String Name, String Value)[] _getParameters()
+                (String Name, String Value)[] _getAllParameters()
                 {
                     var @params = new Dictionary<String, String>(DefaultParameters);
                     foreach (var pair in (parameters ?? new (String Name, String Value)[0]))
@@ -69,24 +64,37 @@ namespace JasonPereira84.Helpers
                         }
                     return @params.Select(pair => (Name: pair.Key, Value: pair.Value)).ToArray();
                 }
+
+                var allParameters = _getAllParameters();
                 using (var command = new TCommand())
                 {
                     command.Connection = connection;
-                    command.CommandText = CommandTextGenerator.Invoke(timestamp, level, messageTemplate, exception, _getParameters());
+                    command.CommandText = CommandTextGenerator.Invoke(timestamp, level, messageTemplate, exception, allParameters);
 
                     connection.Open();
                     command.ExecuteNonQuery();
                     connection.Close();
                 }
+                return allParameters;
             }
 
-            public void WriteEvent(TConnection connection, DateTimeOffset timestamp, LogEventLevel level, String messageTemplate, params (String Name, String Value)[] parameters)
+            public (String Name, String Value)[] WriteEvent(TConnection connection, DateTimeOffset timestamp, LogEventLevel level, String messageTemplate, params (String Name, String Value)[] parameters)
                 => WriteEvent(connection, timestamp, level, null, messageTemplate, parameters);
 
-            public void WriteEvent(DateTimeOffset timestamp, LogEventLevel level, String messageTemplate, params (String Name, String Value)[] parameters)
+            public (String Name, String Value)[] WriteEvent(DateTimeOffset timestamp, LogEventLevel level, String messageTemplate, params (String Name, String Value)[] parameters)
             {
+                var allParameters = new (String Name, String Value)[0];
                 using (var connection = CreateConnection())
-                    WriteEvent(connection, timestamp, level, messageTemplate, parameters);
+                    allParameters = WriteEvent(connection, timestamp, level, messageTemplate, parameters);
+                return allParameters;
+            }
+
+            public (String Name, String Value)[] WriteEvent(DateTimeOffset timestamp, LogEventLevel level, Exception exception, String messageTemplate, params (String Name, String Value)[] parameters)
+            {
+                var allParameters = new (String Name, String Value)[0];
+                using (var connection = CreateConnection())
+                    WriteEvent(connection, timestamp, level, exception, messageTemplate, parameters);
+                return allParameters;
             }
 
         }
@@ -100,10 +108,10 @@ namespace JasonPereira84.Helpers
                 : base(connectionString, commandTextGenerator)
             { }
 
+            //Order flipped for ctor overloading
             private _Context(Generator.CommandText commandTextGenerator, TDatabase database, Generator.ConnectionString<TDatabase> connectionStringGenerator)
                 : this(connectionStringGenerator.Invoke(database), commandTextGenerator)
             { }
-
             protected _Context(TDatabase database, Generator.ConnectionString<TDatabase> connectionStringGenerator, Generator.CommandText commandTextGenerator)
                 : this(commandTextGenerator,
                       database ?? throw new ArgumentNullException(nameof(database)),
