@@ -47,56 +47,49 @@ namespace JasonPereira84.Helpers
                 return connection;
             }
 
-            public (String Name, String Value)[] WriteEvent(TConnection connection, DateTimeOffset timestamp, LogEventLevel level, Exception exception, String messageTemplate, params (String Name, String Value)[] parameters)
+            public (String Name, String Value)[] GetAllParameters(params (String Name, String Value)[] parameters)
             {
-                (String Name, String Value)[] _getAllParameters()
-                {
-                    var @params = new Dictionary<String, String>(DefaultParameters);
-                    foreach (var pair in (parameters ?? new (String Name, String Value)[0]))
-                        if (!String.IsNullOrWhiteSpace(pair.Name))
-                        {
-                            var key = pair.Name.Trim();
-                            var value = pair.Value.Sanitize().EscapeSingleQuotes();
-                            if (!@params.ContainsKey(key))
-                                @params.Add(key, value);
-                            else
-                                @params[key] = value;
-                        }
-                    return @params.Select(pair => (Name: pair.Key, Value: pair.Value)).ToArray();
-                }
+                var @params = new Dictionary<String, String>(DefaultParameters);
+                foreach (var pair in (parameters ?? new (String Name, String Value)[0]))
+                    if (!String.IsNullOrWhiteSpace(pair.Name))
+                    {
+                        var key = pair.Name.Trim();
+                        var value = pair.Value.Sanitize().EscapeSingleQuotes();
+                        if (!@params.ContainsKey(key))
+                            @params.Add(key, value);
+                        else
+                            @params[key] = value;
+                    }
+                return @params.Select(pair => (Name: pair.Key, Value: pair.Value)).ToArray();
+            }
 
-                var allParameters = _getAllParameters();
+            public void WriteEvent(TConnection connection, DateTimeOffset timestamp, LogEventLevel level, Exception exception, String messageTemplate, params (String Name, String Value)[] parameters)
+            {
                 using (var command = new TCommand())
                 {
                     command.Connection = connection;
-                    command.CommandText = CommandTextGenerator.Invoke(timestamp, level, messageTemplate, exception, allParameters);
+                    command.CommandText = CommandTextGenerator.Invoke(timestamp, level, messageTemplate, exception, parameters);
 
                     connection.Open();
                     command.ExecuteNonQuery();
                     connection.Close();
                 }
-                return allParameters;
             }
 
-            public (String Name, String Value)[] WriteEvent(TConnection connection, DateTimeOffset timestamp, LogEventLevel level, String messageTemplate, params (String Name, String Value)[] parameters)
+            public void WriteEvent(TConnection connection, DateTimeOffset timestamp, LogEventLevel level, String messageTemplate, params (String Name, String Value)[] parameters)
                 => WriteEvent(connection, timestamp, level, null, messageTemplate, parameters);
 
-            public (String Name, String Value)[] WriteEvent(DateTimeOffset timestamp, LogEventLevel level, String messageTemplate, params (String Name, String Value)[] parameters)
+            public void WriteEvent(DateTimeOffset timestamp, LogEventLevel level, Exception exception, String messageTemplate, params (String Name, String Value)[] parameters)
             {
-                var allParameters = new (String Name, String Value)[0];
-                using (var connection = CreateConnection())
-                    allParameters = WriteEvent(connection, timestamp, level, messageTemplate, parameters);
-                return allParameters;
-            }
-
-            public (String Name, String Value)[] WriteEvent(DateTimeOffset timestamp, LogEventLevel level, Exception exception, String messageTemplate, params (String Name, String Value)[] parameters)
-            {
-                var allParameters = new (String Name, String Value)[0];
                 using (var connection = CreateConnection())
                     WriteEvent(connection, timestamp, level, exception, messageTemplate, parameters);
-                return allParameters;
             }
 
+            public void WriteEvent(DateTimeOffset timestamp, LogEventLevel level, String messageTemplate, params (String Name, String Value)[] parameters)
+            {
+                using (var connection = CreateConnection())
+                    WriteEvent(connection, timestamp, level, messageTemplate, parameters);
+            }
         }
 
         public abstract class _Context<TDatabase, TConnection, TCommand> : _Context<TConnection, TCommand>
