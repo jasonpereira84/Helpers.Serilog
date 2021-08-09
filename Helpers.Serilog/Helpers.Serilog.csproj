@@ -23,7 +23,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Authors>jasonpereira84@gmail.com</Authors>
-    <Version>3.0.1</Version>
+    <Version>3.0.2</Version>
 
   </PropertyGroup>
 
