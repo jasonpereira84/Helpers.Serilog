@@ -9,21 +9,26 @@ namespace JasonPereira84.Helpers
     {
         public static partial class Serilog
         {
-            public static LogEventLevel Parse(this String @string, LogEventLevel defaultValue)
-                => Enum.TryParse(@string, true, out LogEventLevel logEventLevel) ? logEventLevel : defaultValue;
-
-            public static Helpers.Serilog.LogLevels ToLogLevels(this Dictionary<String, String> dictionary, LogEventLevel defaultValue)
+            public static Helpers.Serilog.LogLevels AsLogLevels(this IDictionary<String, String> dictionary, LogEventLevel defaultValue = LogEventLevel.Warning)
             {
-                var levels = Helpers.Serilog.LogLevels.From(defaultValue, new Dictionary<String, LogEventLevel>());
+                LogEventLevel _parse(String s) 
+                    => Enum.TryParse(s, true, out LogEventLevel l) ? l : defaultValue;
+
+                var levels = new Helpers.Serilog.LogLevels
+                {
+                    Default = defaultValue,
+                    Overrides = new Dictionary<String, LogEventLevel>()
+                };
                 foreach (var pair in dictionary)
                 {
                     if (String.Equals(pair.Key, "Default", StringComparison.OrdinalIgnoreCase))
-                        levels.Default = Parse(pair.Value, defaultValue);
+                        levels.Default = _parse(pair.Value);
                     else
-                        levels.Overrides.Add(pair.Key, Parse(pair.Value, defaultValue));
+                        levels.Overrides.Add(pair.Key, _parse(pair.Value));
                 }
                 return levels;
             }
+
         }
     }
 }

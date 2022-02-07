@@ -39,5 +39,11 @@
     <PackageReference Include="Serilog.Sinks.MySQL" Version="4.0.0" />
     <PackageReference Include="JasonPereira84.AppSettings" Version="3.1.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 
 </Project>

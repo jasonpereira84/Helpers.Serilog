@@ -12,13 +12,6 @@ namespace JasonPereira84.Helpers
             public LogEventLevel Default { get; set; }
 
             public Dictionary<String, LogEventLevel> Overrides { get; set; }
-
-            public static LogLevels From(LogEventLevel @default, Dictionary<String, LogEventLevel> overrides)
-                => new LogLevels
-                {
-                    Default = @default,
-                    Overrides = overrides
-                };
         }
     }
 }
