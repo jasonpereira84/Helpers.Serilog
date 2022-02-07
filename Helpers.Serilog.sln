@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\release.yml = .github\workflows\release.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.Serilog.Tests", "Helpers.Serilog.Tests\Helpers.Serilog.Tests.csproj", "{A9E0B706-C756-497D-AC77-0D9095ADB315}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{68656C70-7365-7269-6C6F-670000737263}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68656C70-7365-7269-6C6F-670000737263}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68656C70-7365-7269-6C6F-670000737263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9E0B706-C756-497D-AC77-0D9095ADB315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9E0B706-C756-497D-AC77-0D9095ADB315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9E0B706-C756-497D-AC77-0D9095ADB315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9E0B706-C756-497D-AC77-0D9095ADB315}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
