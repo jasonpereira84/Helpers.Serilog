@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30225.117
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Serilog", "Helpers.Serilog\Helpers.Serilog.csproj", "{68656C70-7365-7269-6C6F-670000737263}"
 EndProject
@@ -14,12 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{AC52
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{EE9BA434-B1D0-4512-A904-09473530B75C}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\develop.yml = .github\workflows\develop.yml
-		.github\workflows\master.yml = .github\workflows\master.yml
-		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\build_and_publish.yml = .github\workflows\build_and_publish.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.Serilog.Tests", "Helpers.Serilog.Tests\Helpers.Serilog.Tests.csproj", "{A9E0B706-C756-497D-AC77-0D9095ADB315}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Serilog.Tests", "Helpers.Serilog.Tests\Helpers.Serilog.Tests.csproj", "{A9E0B706-C756-497D-AC77-0D9095ADB315}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

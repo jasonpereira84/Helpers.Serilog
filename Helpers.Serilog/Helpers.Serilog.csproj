@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
     <Configuration>'$(Configuration)'</Configuration>
     <FileVersion>1.0.0.0</FileVersion>
     <OutputType>Library</OutputType>
@@ -15,6 +15,9 @@
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PackageId>JasonPereira84.Helpers.Serilog</PackageId>
     <Title>JasonPereira84's Serilog helpers library</Title>
     <PackageDescription>Serilog helper methods, properties, objects etc.</PackageDescription>
@@ -37,10 +40,15 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.12.0" />
     <PackageReference Include="Serilog.Sinks.MySQL" Version="4.6.0" />
-    <PackageReference Include="JasonPereira84.AppSettings" Version="3.1.1" />
+    <PackageReference Include="JasonPereira84.AppSettings" Version="6.0.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>

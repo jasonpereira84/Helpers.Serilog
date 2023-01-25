@@ -1,0 +1,47 @@
+name: Build & Publish
+
+on:
+  push:
+    branches: [ develop, release-*, hotfix-*, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Get configuration
+      run: |
+        if [ "${{ github.ref_name }}" == "develop" ]; then
+          echo "cfg=Debug" >> $GITHUB_ENV
+          echo "cfg set to Debug"
+        else
+          echo "cfg=Release" >> $GITHUB_ENV
+          echo "cfg set to Release"
+        fi
+    
+    - name: Setup framework
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+        
+    - name: Install dependencies
+      run: dotnet restore
+      
+    - name: Build solution
+      run: dotnet build --configuration ${{ env.cfg }} --no-restore --verbosity Normal --output BuildResults --disable-parallel
+
+    - name: Run tests
+      run: dotnet test --configuration ${{ env.cfg }} --no-restore --verbosity Normal
+
+    - name: Upload artifact 
+      uses: actions/upload-artifact@v2
+      with:
+        path: BuildResults
+        if-no-files-found: error
+      
+    - name: Publish package
+      if: github.ref_name == 'master'
+      run: dotnet nuget push BuildResults/*.nupkg -k ${{secrets.NUGET_APIKEY}} -s https://api.nuget.org/v3/index.json
