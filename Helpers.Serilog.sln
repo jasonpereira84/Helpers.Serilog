@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{AC52
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{EE9BA434-B1D0-4512-A904-09473530B75C}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\build_and_publish.yml = .github\workflows\build_and_publish.yml
+		.github\workflows\build_test_and_publish.yml = .github\workflows\build_test_and_publish.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Serilog.Tests", "Helpers.Serilog.Tests\Helpers.Serilog.Tests.csproj", "{A9E0B706-C756-497D-AC77-0D9095ADB315}"
