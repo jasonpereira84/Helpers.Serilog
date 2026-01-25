@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using Serilog.Core;
 using Serilog.Events;
+using System.Linq;
+
+#nullable enable
 
 namespace JasonPereira84.Helpers
 {

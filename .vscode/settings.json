@@ -1,0 +1,5 @@
+{
+    "dotnet.defaultSolution": "Helpers.Serilog.sln",
+    "editor.inlayHints.enabled": "on",
+    "editor.formatOnSave": true
+}
