@@ -4,6 +4,7 @@ using System.Reflection;
 using Serilog.Core;
 using Serilog.Events;
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable enable
 
@@ -11,9 +12,12 @@ namespace JasonPereira84.Helpers
 {
     namespace Serilog
     {
+        [AttributeUsage(AttributeTargets.Property)]
+        public class SensitiveDataAttribute : Attribute { }
+
         public class SensitiveDataDestructuringPolicy : IDestructuringPolicy
         {
-            public Boolean TryDestructure(Object value, ILogEventPropertyValueFactory factory, out LogEventPropertyValue? result)
+            public Boolean TryDestructure(Object value, ILogEventPropertyValueFactory factory, [NotNullWhen(true)] out LogEventPropertyValue? result)
             {
                 // Avoid infinite recursion by checking if we are already destructuring
                 var type = value.GetType();
